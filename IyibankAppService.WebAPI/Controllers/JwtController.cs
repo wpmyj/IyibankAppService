@@ -67,6 +67,7 @@ namespace IyibankAppService.WebAPI.Controllers
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, applicationUser.UserName),
+                new Claim(JwtRegisteredClaimNames.NameId,"57614409"),
                 new Claim(JwtRegisteredClaimNames.Jti, await _jwtOptions.JtiGenerator()),
                 new Claim(JwtRegisteredClaimNames.Iat, ToUnixEpochDate(_jwtOptions.IssueAt).ToString(), ClaimValueTypes.Integer64),
                 identity.FindFirst("LoginCharacter")
@@ -129,12 +130,13 @@ namespace IyibankAppService.WebAPI.Controllers
         private static Task<ClaimsIdentity> LoginValidate(ApplicationUser user)
         {
             //登录用户
-            if (user.UserName == "zhaokuo" && user.Password == "zhaokuo12345")
+            if (user.UserName == "yelifei" && user.Password == "123456")
             {
                 return Task.FromResult(new ClaimsIdentity(new GenericIdentity(user.UserName, "Token"),
                     new[]
                     {
-                        new Claim("LoginCharacter","I_am_zhaokuo")
+                        new Claim("LoginCharacter","yelifei"),
+                        new  Claim("UserId","57614409")
                     }));
             }
             //访客用户 这里不同的用户可以看成不同的角色
