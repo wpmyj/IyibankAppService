@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.IdentityModel.Tokens.Jwt;
 using IyibankAppService.Utils.OAuth;
 using IyibankAppService.Models.Models;
+using IyibankAppService.Utils.Date;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -23,35 +24,24 @@ namespace IyibankAppService.WebAPI.Controllers
     {
         private readonly JwtIssuerOptions _jwtOptions;
         private readonly ILogger _logger;
-        /// <summary>
-        /// json 序列化方法, 控制器初始化后可以在每个方法返回时使用
-        /// </summary>
-        private readonly JsonSerializerSettings _seriallizerSettings;
 
         /// <summary>
         /// 构造函数, 使用依赖注入进行相关配置
         /// </summary>
         /// <param name="jwtoptions"></param>
         /// <param name="loggerFactory"></param>
-        public JwtController(IOptions<JwtIssuerOptions> jwtoptions,
-                        ILoggerFactory loggerFactory)
+        public JwtController(IOptions<JwtIssuerOptions> jwtoptions, ILoggerFactory loggerFactory)
         {
             _jwtOptions = jwtoptions.Value;
-            ThrowIfInvalidOptions(_jwtOptions);
             _logger = loggerFactory.CreateLogger<JwtController>();
-            _seriallizerSettings = new JsonSerializerSettings
-            {
-                Formatting = Formatting.Indented
-            };
+            JwtHelper.ThrowIfInvalidOptions(_jwtOptions);
         }
 
-        //请求方法
         /// <summary>
-        /// Post方法, 相当于登录
-        /// 这里用户信息使用了.net core 的模型绑定, 直接从表单中绑定用户信息, 所有测试的时候应该使用 'xxx-form-urlendcode'类型
+        /// 使用了.net core 的模型绑定, 直接从表单中绑定信息,应使用'xxx-form-urlendcode'类型
         /// </summary>
-        /// <param name="applicationUser">用户信息</param>
-        /// <returns>登录结果</returns>
+        /// <param name="applicationUser">登录信息</param>
+        /// <returns>登录结果access_token</returns>
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> Get([FromForm] Shopusers applicationUser)
@@ -69,7 +59,7 @@ namespace IyibankAppService.WebAPI.Controllers
                 new Claim(JwtRegisteredClaimNames.Sub, applicationUser.UserName),
                 new Claim(JwtRegisteredClaimNames.NameId,"57614409"),
                 new Claim(JwtRegisteredClaimNames.Jti, await _jwtOptions.JtiGenerator()),
-                new Claim(JwtRegisteredClaimNames.Iat, ToUnixEpochDate(_jwtOptions.IssueAt).ToString(), ClaimValueTypes.Integer64),
+                new Claim(JwtRegisteredClaimNames.Iat, DateTimeHelper.ToUnixEpochDate(_jwtOptions.IssueAt).ToString(), ClaimValueTypes.Integer64),
                 identity.FindFirst("LoginCharacter")
             };
 
@@ -87,39 +77,17 @@ namespace IyibankAppService.WebAPI.Controllers
             //序列化返回的对象
             var response = new
             {
-                access_token = encodedJwt,
-                expires_in = (int)_jwtOptions.ValidFor.TotalSeconds
+                Success = "0",
+                Message = "",
+                Data = new
+                {
+                    Access_Token = encodedJwt,
+                    Expires_In = (int)_jwtOptions.ValidFor.TotalSeconds
+                }
+
             };
-            var resJson = JsonConvert.SerializeObject(response, _seriallizerSettings);
-            return new OkObjectResult(resJson);
+            return Json(response);
         }
-
-
-        //相关静态方法
-
-        /// <summary>
-        /// 验证jwt配置是否合法
-        /// </summary>
-        /// <param name="options">配置对象</param>
-        private static void ThrowIfInvalidOptions(JwtIssuerOptions options)
-        {
-            if (options == null)
-                throw new ArgumentNullException(nameof(options));
-            if (options.ValidFor <= TimeSpan.Zero)
-                throw new ArgumentException("Must be a non-zero TimeSpan", nameof(JwtIssuerOptions.ValidFor));
-            if (options.SigningCredentials == null)
-                throw new ArgumentNullException(nameof(JwtIssuerOptions.SigningCredentials));
-            if (options.JtiGenerator == null)
-                throw new ArgumentNullException(nameof(JwtIssuerOptions.JtiGenerator));
-        }
-
-        /// <summary>
-        /// 从1970年到某时间的毫秒数
-        /// </summary>
-        /// <param name="date">计算时间</param>
-        /// <returns></returns>
-        private static long ToUnixEpochDate(DateTime date)
-            => (long)Math.Round((date.ToUniversalTime() - new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero)).TotalSeconds);
 
         /// <summary>
         /// 模拟登录验证操作

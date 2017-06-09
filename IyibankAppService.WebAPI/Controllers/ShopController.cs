@@ -25,7 +25,13 @@ namespace IyibankAppService.WebAPI.Controllers
         public async Task<IActionResult> Get()
         {
             var list = _shopService.GetShops();
-            return new JsonResult(1);
+            var result = new
+            {
+                Success = "0",
+                Message = "",
+                Data = list
+            };
+            return Json(result);
         }
     }
 }

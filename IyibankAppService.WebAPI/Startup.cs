@@ -1,4 +1,7 @@
-﻿using IyibankAppService.Utils.OAuth;
+﻿using IyibankAppService.ApiService;
+using IyibankAppService.Data.Infrastructure;
+using IyibankAppService.Data.Repository;
+using IyibankAppService.Utils.OAuth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -7,11 +10,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Text;
-using IyibankAppService.Data.Repository;
-using IyibankAppService.ApiService;
-using IyibankAppService.Data.Infrastructure;
 
 namespace IyibankAppService.WebAPI
 {
@@ -45,6 +46,7 @@ namespace IyibankAppService.WebAPI
             {
                 options.AddPolicy("App", policy => policy.RequireClaim("LoginCharacter", "I_am_zhaokuo"));
             });
+
             // 配置jwt
             services.Configure<JwtIssuerOptions>(options =>
             {
@@ -53,18 +55,20 @@ namespace IyibankAppService.WebAPI
                 options.SigningCredentials = new SigningCredentials(_signingKey, SecurityAlgorithms.HmacSha256);
             });
 
-            services.AddSingleton<IShopService, ShopService>();
             // 注入服务
             services.AddUnitOfWork().AddService();
-            // Add framework services.确保 所有内容 都需要认证策略
+
+            // Add framework services.确保 所有内容 都需要认证策略config
             services.AddMvc(config =>
             {
                 var policy = new AuthorizationPolicyBuilder()
                                     .RequireAuthenticatedUser()
                                     .Build();
                 config.Filters.Add(new AuthorizeFilter(policy));
-            });
-
+            }).AddJsonOptions(options =>
+            {
+                options.SerializerSettings.ContractResolver = new DefaultContractResolver();
+            });//AddJsonOptions设置返回的Json 格式为驼峰命名
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

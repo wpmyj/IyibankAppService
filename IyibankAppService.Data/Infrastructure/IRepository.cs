@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using Dapper;
-using IyibankAppService.Data.Config;
-using System.Linq.Expressions;
+﻿using System.Collections.Generic;
 
 namespace IyibankAppService.Data.Infrastructure
 {

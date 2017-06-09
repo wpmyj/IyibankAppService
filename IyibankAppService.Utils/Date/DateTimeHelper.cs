@@ -34,6 +34,14 @@ namespace IyibankAppService.Utils.Date
         }
 
         /// <summary>
+        /// 从1970年到某时间的毫秒数
+        /// </summary>
+        /// <param name="date">计算时间</param>
+        /// <returns></returns>
+        public static long ToUnixEpochDate(DateTime date)
+            => (long)Math.Round((date.ToUniversalTime() - new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero)).TotalSeconds);
+
+        /// <summary>
         /// 获取从Unix起始时间到给定时间的秒数
         /// </summary>
         /// <param name="datetime"></param>
