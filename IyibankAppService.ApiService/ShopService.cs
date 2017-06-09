@@ -24,12 +24,10 @@ namespace IyibankAppService.ApiService
     {
         private readonly IShopRepository ShopRepository;
 
-        private readonly IUnitOfWork unitOfWork;
 
-        public ShopService(IShopRepository ShopRepository, IUnitOfWork unitOfWork)
+        public ShopService(IShopRepository ShopRepository)
         {
             this.ShopRepository = ShopRepository;
-            this.unitOfWork = unitOfWork;
         }
 
         public List<Shop> GetShops()
@@ -47,19 +45,16 @@ namespace IyibankAppService.ApiService
         public void AddShop(Shop Shop, bool commit = true)
         {
             ShopRepository.Add(Shop);
-            if (commit) unitOfWork.Commit();
         }
 
         public void UpdateShop(Shop Shop, bool commit = true)
         {
             ShopRepository.Modify(Shop);
-            if (commit) this.unitOfWork.Commit();
         }
 
         public void DeleteShop(int id, bool commit = true)
         {
             ShopRepository.Delete(id);
-            if (commit) this.unitOfWork.Commit();
         }
 
     }

@@ -5,6 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="6.0.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="1.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\IyibankAppService.Data\IyibankAppService.Data.csproj" />
     <ProjectReference Include="..\IyibankAppService.Models\IyibankAppService.Models.csproj" />
   </ItemGroup>

@@ -31,6 +31,8 @@
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.1" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\IyibankAppService.ApiService\IyibankAppService.ApiService.csproj" />
+    <ProjectReference Include="..\IyibankAppService.Data\IyibankAppService.Data.csproj" />
     <ProjectReference Include="..\IyibankAppService.Models\IyibankAppService.Models.csproj" />
     <ProjectReference Include="..\IyibankAppService.Utils\IyibankAppService.Utils.csproj" />
   </ItemGroup>

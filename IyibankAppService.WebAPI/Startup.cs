@@ -9,6 +9,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Text;
+using IyibankAppService.Data.Repository;
+using IyibankAppService.ApiService;
+using IyibankAppService.Data.Infrastructure;
 
 namespace IyibankAppService.WebAPI
 {
@@ -34,6 +37,7 @@ namespace IyibankAppService.WebAPI
         {
             //添加 可配置功能
             services.AddOptions();
+
             // 从配置文件中获取配置信息
             var jwtAppSettingOptions = Configuration.GetSection(nameof(JwtIssuerOptions));
 
@@ -48,6 +52,10 @@ namespace IyibankAppService.WebAPI
                 options.Audience = jwtAppSettingOptions[nameof(JwtIssuerOptions.Audience)];
                 options.SigningCredentials = new SigningCredentials(_signingKey, SecurityAlgorithms.HmacSha256);
             });
+
+            services.AddSingleton<IShopService, ShopService>();
+            // 注入服务
+            services.AddUnitOfWork().AddService();
             // Add framework services.确保 所有内容 都需要认证策略
             services.AddMvc(config =>
             {
@@ -56,6 +64,7 @@ namespace IyibankAppService.WebAPI
                                     .Build();
                 config.Filters.Add(new AuthorizeFilter(policy));
             });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

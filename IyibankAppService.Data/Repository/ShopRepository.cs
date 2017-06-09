@@ -74,17 +74,8 @@ namespace IyibankAppService.Data.Repository
         {
             using (IDbConnection conn = DbFactory.GetNewConnection())
             {
-                string querySql = @"SELECT [Id]
-                                          ,[UserName]
-                                          ,[Password]
-                                          ,[Gender]
-                                          ,[Birthday]
-                                          ,[CreateUserId]
-                                          ,[CreateDate]
-                                          ,[UpdateUserId]
-                                          ,[UpdateDate]
-                                          ,[IsDeleted]
-                                      FROM [dbo].[User]";
+                string querySql = @"SELECT *
+                                      FROM shops";
                 return conn.Query<Shop>(querySql);
             }
         }
