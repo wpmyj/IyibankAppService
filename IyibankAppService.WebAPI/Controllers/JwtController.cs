@@ -84,7 +84,6 @@ namespace IyibankAppService.WebAPI.Controllers
                     Access_Token = encodedJwt,
                     Expires_In = (int)_jwtOptions.ValidFor.TotalSeconds
                 }
-
             };
             return Json(response);
         }

@@ -56,7 +56,7 @@ namespace IyibankAppService.WebAPI
             });
 
             // 注入服务
-            services.AddUnitOfWork().AddService();
+            services.AddService();
 
             // Add framework services.确保 所有内容 都需要认证策略config
             services.AddMvc(config =>
