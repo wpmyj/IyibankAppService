@@ -1,4 +1,4 @@
-
+﻿
 // Dashboard.js
 // ====================================================================
 // This file should not be included in your project.
@@ -227,8 +227,8 @@ $(window).on('load', function() {
     // =================================================================
     $.niftyNoty({
         type: 'dark',
-        title: 'Welcome Administrator.',
-        message: 'You will notice that you now have an admin menu<br> that appears on the right hand side.',
+        title: '管理员：欢迎您登陆系统。',
+        message: '您可以点击菜单进行系统管理',
         container: 'floating',
         timer: 5000
     });

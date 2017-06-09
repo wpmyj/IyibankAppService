@@ -5,9 +5,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Config\" />
-    <Folder Include="Infrastructure\" />
     <Folder Include="Repository\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="1.50.2" />
+    <PackageReference Include="MySql.Data" Version="7.0.7-m61" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\IyibankAppService.Utils\IyibankAppService.Utils.csproj" />
   </ItemGroup>
 
 </Project>

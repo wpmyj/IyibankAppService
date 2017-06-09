@@ -54,7 +54,7 @@ namespace IyibankAppService.WebAPI.Controllers
         /// <returns>登录结果</returns>
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Get([FromForm] ApplicationUser applicationUser)
+        public async Task<IActionResult> Get([FromForm] Shopusers applicationUser)
         {
             _logger.LogInformation("Get Token");
             var identity = await LoginValidate(applicationUser);
@@ -127,7 +127,7 @@ namespace IyibankAppService.WebAPI.Controllers
         /// <param name="user">用户</param>
         /// <returns>带有权限的对象</returns>
         /// <remarks>此方法为验证方法, 在正式项目中作为授权和配置权限使用, 注意与start up中的权限对应</remarks>
-        private static Task<ClaimsIdentity> LoginValidate(ApplicationUser user)
+        private static Task<ClaimsIdentity> LoginValidate(Shopusers user)
         {
             //登录用户
             if (user.UserName == "yelifei" && user.Password == "123456")
