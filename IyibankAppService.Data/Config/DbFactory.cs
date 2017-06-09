@@ -15,11 +15,9 @@ namespace IyibankAppService.Data.Config
 
         public static IDbConnection GetNewConnection()
         {
-            var con = ConnectionString;
-
+            var connection = ConnectionString;
             //var con = @"server=114.215.158.176;port=5002;database=oemmis_dev;uid=oemmis_dev;pwd=000000;SslMode=None";
-            return new MySqlConnection(con);
-            //return DbConnection;
+            return new MySqlConnection(connection);
         }
     }
 }

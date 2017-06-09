@@ -7,7 +7,7 @@ namespace IyibankAppService.Models.Models
     /// <summary>
     /// 
     /// </summary>
-    public partial class Shops
+    public partial class Shop
     {
         /// <summary>
         /// 
